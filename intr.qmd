@@ -1,0 +1,147 @@
+---
+title: "intr"
+format: html
+editor: visual
+---
+
+## `R`中的数据类型
+
+> `R`中一切皆向量 `vector`
+
+### 原子向量 (atomic)
+
+-   `double`浮点数、小数 `integer`整数 (*均属于*`numeric`数值) \`
+
+-   `character` 字符串
+
+-   `logical` 逻辑值
+
+-   `factor` 因子
+
+```{r}
+# rep(1,n) 把1重复n次
+# c() 合并向量
+str1 = c(rep('m',2),rep('f',3),'m')
+str1
+typeof(str1) # 判断数据类型
+class(str1) # 判断类
+fct1 = factor(str1,levels = c('f','m')) # factor生成因子， levels参数指定字符串的等级
+fct1
+typeof(fct1)
+class(fct1)
+
+seq(from = 1, to = 5, by = 1) # 等价于1:5
+fct2 = factor(1:5,levels = 5:1)
+fct2
+```
+
+-   Missing Value
+
+> `NA` `NULL` `NaN`
+
+```{r}
+is.na(NA)
+is.na(NULL)
+is.na(NaN)
+is.null(NA)
+is.null(NULL)
+is.null(NaN)
+is.nan(NA)
+is.nan(NULL)
+is.nan(NaN)
+```
+
+> `NaN` 会被R当成`NA`处理, 其有超过`NA`外的特殊用法，比如`is.nan()`
+
+### 广义向量 (`vector`)
+
+-   `matrix`
+
+> 矩阵的元素必须为一种`type`
+
+> 矩阵默认按列排列
+
+```{r}
+m1 = matrix(1:6,ncol = 3)
+m1
+m2 = matrix(1:6,ncol = 3,byrow = TRUE) #显式指定按行排列
+m2
+```
+
+-   `list`
+
+> 区分 `[[]]` 与 `[]`
+
+```{r}
+l1 = list(1:5,str1,m1)
+l1
+l1[[1]]
+class(l1[[1]])
+l1[1]
+class(l1[1])
+
+identical(l1[[1]],l1[1])
+```
+
+-   `data.frame`
+
+> `是list` 和 `matrix` 的混合版本，按列排列
+
+```{r}
+a = data.frame(l1 = c(1,1),
+               l2 = c('m','f'))
+a
+```
+
+```{r}
+# 按行输入
+tibble::tribble(
+  ~l1,~l2,
+  1,'m',
+  1,'f'
+)
+
+# 按列输入
+tibble::tibble(
+  l1 = c(1,1),
+  l2 = c('m','f')
+)
+```
+
+## loop (循环)
+
+-   `for`
+
+```{r}
+#求1:1e4中偶数的和
+a = 1:1e4
+y = 0
+for(i in a){
+  if(i %% 2 == 0){y = y+i} else{0}}  # %% 求余
+y
+#求1:1e4中奇数的和
+x = 1:1e4
+y = 0
+for (i in x) {
+ if(i %% 2 != 0){y = y+i} else{0}}
+y
+```
+
+## Branching (分支)
+
+-   `if`
+
+```{r}
+grade = 86
+if(grade > 90){
+  print("优秀")
+} else if(grade > 60){
+  print("及格")
+} else {
+  print("不及格")
+}
+```
+
+## function (函数)
+
+-   创建一个函数
